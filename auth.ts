@@ -8,6 +8,7 @@ import { getUserById } from "./data/user";
 import authConfig from "./auth.config";
 import { UserRole } from "@prisma/client";
 import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation";
+import { getAccountByUserId } from "./data/account";
 
 
 
@@ -71,6 +72,23 @@ async signIn({ user, account }) {
         session.user.role = token.role as UserRole;
       }
 
+      if ( session.user) {
+        session.user.isTwoFactorEnable = token.isTwoFactorEnable as boolean
+      }
+
+      if (session.user) {
+        if (typeof token.name === 'string' && typeof token.email === 'string' ) {
+          session.user.name = token.name;
+          session.user.email = token.email;
+          session.user.isOAuth = token.isOAuth as boolean
+        }
+      }
+
+      // if(session.user) {
+      //   session.user.name = token.name 
+      //   session.user.email = token.email 
+      // }
+
       return session;
     },
     async jwt({ token }) {
@@ -80,7 +98,15 @@ async signIn({ user, account }) {
 
       if (!existingUser) return token;
 
+      const existingAccount = await getAccountByUserId(
+        existingUser.id
+      )
+
+      token.isOAuth = !!existingAccount
+      token.name = existingUser.name
+      token.email = existingUser.email
       token.role = existingUser.role;
+      token.isTwoFactorEnable = existingUser.isTwoFactorEnable
 
       return token;
     },
