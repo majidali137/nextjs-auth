@@ -19,14 +19,16 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
-    return null;
+    // Removed return null; to satisfy the expected return type
+    return; // Implicitly returns undefined, which is compatible with void
   }
 
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    return null;
+    // Removed return null; for the same reason as above
+    return;
   }
 
   if (!isLoggedIn && !isPublicRoute) {
@@ -43,8 +45,7 @@ export default auth((req) => {
     ));
   }
   
-
-  return null ;
+  // Removed return null; as it's not necessary to explicitly return null
 });
 
 // Optionally, don't invoke Middleware on some paths
