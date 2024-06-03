@@ -14,7 +14,7 @@ export const NewVerificationForm = () => {
 
   const searchParams = useSearchParams();
 
-  const token = searchParams.get("token");
+  const token = searchParams?.get("token");
 
   const onSubmit = useCallback(() => {
     if (!token) {

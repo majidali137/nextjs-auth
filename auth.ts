@@ -115,3 +115,15 @@ async signIn({ user, account }) {
   session: { strategy: "jwt" },
   ...authConfig,
 });
+
+
+
+
+
+
+
+
+
+
+
+
