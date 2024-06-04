@@ -9,7 +9,7 @@ export const sendTwoFactorTokenEmail = async (
 )=> {
   try {
     const response = await resend.emails.send({
-      from: "nextjs-auth@resend.dev",
+      from: "power-devs.com",
       to: email,
       subject: "2FA Code",
       html: `<p>Your 2FA code: ${token}</p>`,
@@ -28,7 +28,7 @@ export const sendPasswordResetEmail = async (
 
   try {
     const response = await resend.emails.send({
-      from: "nextjs-auth@resend.dev",
+      from: "power-devs.com",
       to: email,
       subject: "Reset Your Password",
       html: `<p>Please click <a href="${resetLink}">here</a> to reset your password.</p>`,
@@ -47,7 +47,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
   try {
     const response = await resend.emails.send({
-      from: "nextjs-auth@resend.dev",
+      from: "power-devs.com",
       to: email,
       subject: "Confirm your email",
       html: `<p>Please click <a href="${confirmLink}">here</a> to confirm your email address.</p>`,
