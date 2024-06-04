@@ -10,21 +10,21 @@ interface User {
 }
 
 interface UserStore {
-  user: User | null;
+  users: User | null;
   refreshUser: () => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
-  user: null,
+  users: null,
   refreshUser: async () => {
     try {
       const response = await axios.get('/api/current-user', {
         withCredentials: true, // Ensure cookies are sent with the request
       });
-      set({ user: response.data });
+      set({ users: response.data });
     } catch (error) {
-      console.error('Failed to fetch user:', error);
-      set({ user: null });
+      console.error('Failed to fetch users:', error);
+      set({ users: null });
     }
   },
 }));

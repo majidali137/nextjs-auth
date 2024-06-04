@@ -59,12 +59,15 @@ import { ExitIcon } from "@radix-ui/react-icons";
 import { useUserStore } from "@/hooks/useUserStore";
 import useFetchUserOnMount from "@/hooks/useUserStore";
 import { PuffLoader } from "react-spinners";
+import { CiSettings } from "react-icons/ci";
+import { UserProfile } from "./user-profile";
+
 
 const UserButton = () => {
   useFetchUserOnMount();
-  const { user } = useUserStore();
+  const { users } = useUserStore();
 
-  if (!user) {
+  if (!users) {
     return <PuffLoader/>
   }
 
@@ -72,16 +75,22 @@ const UserButton = () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={user?.image || ""} />
+          <AvatarImage src={users?.image || ""}  />
           <AvatarFallback className="bg-sky-500">
             <FaUser className="text-white" />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-50" align="end">
-        <DropdownMenuItem>
-          <UploadProfilePicture userId={user.id} />
-        </DropdownMenuItem>
+        {/* <DropdownMenuItem>
+          <UploadProfilePicture userId={users.id} />
+        </DropdownMenuItem> */}
+        <UserProfile>
+          <DropdownMenuItem>
+          <CiSettings className="h-4 w-4 mr-2" />
+            Manage Account
+          </DropdownMenuItem>
+        </UserProfile>
         <LogoutButton>
           <DropdownMenuItem>
             <ExitIcon className="h-4 w-4 mr-2" />
