@@ -42,7 +42,6 @@ import { PuffLoader } from "react-spinners";
 const UserProfileFrom = () => {
   const user = useCurrentUser();
 
-
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const { update } = useSession();
@@ -56,7 +55,7 @@ const UserProfileFrom = () => {
       name: user?.name || undefined,
       email: user?.email || undefined,
       role: user?.role || undefined,
-      isTwoFactorEnable: user?.isTwoFactorEnable || undefined
+      isTwoFactorEnable: user?.isTwoFactorEnable || undefined,
     },
   });
 
@@ -79,163 +78,176 @@ const UserProfileFrom = () => {
   const { users } = useUserStore();
 
   if (!users) {
-    return <PuffLoader/>
+    return <PuffLoader />;
   }
 
   return (
-    <Card className="w-[600px]">
-      <CardHeader className="items-center">
-        {/* <p className="text-2xl font-semibold text-center pb-4 ">Profile</p> */}
-        <Avatar className="w-60 h-60 items-center mb-1">
+    <div className="w-full px-2 items-center justify-center flex">
+      <Card className="sm:w-[600px] w-full">
+        <CardHeader className="items-center">
+          {/* <p className="text-2xl font-semibold text-center pb-4 ">Profile</p> */}
+          {/* <Avatar className="sm:w-60 sm:h-60 w-40 h-40 items-center mb-1">
           <AvatarImage src={users?.image || ""} />
           <AvatarFallback className="bg-sky-500">
-            <FaUser className="text-white w-40 h-40" />
+            <FaUser className="text-white sm:w-40 sm:h-40 w-20 h-20" />
           </AvatarFallback>
-        </Avatar>
-        <UploadProfilePicture userId={users?.id} />
-        {/* <Button variant="outline" className="rounded-full px-10 mt-6 " >Change Avatar</Button> */}
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Please Enter Name"
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {user?.isOAuth === false && (
-                <>
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="email"
-                            placeholder="example@mail.com"
-                            disabled={isPending}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+        </Avatar> */}
 
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="******"
-                            disabled={isPending}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+          <Avatar className="sm:w-60 sm:h-60 w-40 h-40 items-center mb-1 rounded-full overflow-hidden">
+            <AvatarImage
+              src={users?.image || ""}
+              className="w-full h-full object-cover"
+            />
+            <AvatarFallback className="bg-sky-500 flex items-center justify-center w-full h-full rounded-full">
+              <FaUser className="text-white sm:w-40 sm:h-40 w-20 h-20" />
+            </AvatarFallback>
+          </Avatar>
 
-                  <FormField
-                    control={form.control}
-                    name="newPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>New Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="******"
-                            disabled={isPending}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
-
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Role</FormLabel>
-                    <Select
-                      disabled={isPending}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
-                        <SelectItem value={UserRole.USER}>User</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {user?.isOAuth === false && (
+          <UploadProfilePicture userId={users?.id} />
+          {/* <Button variant="outline" className="rounded-full px-10 mt-6 " >Change Avatar</Button> */}
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="isTwoFactorEnable"
+                  name="name"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel>Two Factor Authentication</FormLabel>
-                        <FormDescription>
-                          Enable two factor authentication for your account
-                        </FormDescription>
-                      </div>
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Switch
+                        <Input
+                          {...field}
+                          placeholder="Please Enter Name"
                           disabled={isPending}
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
-            </div>
-            <FormError message={error} />
-            <FormSuccess message={success} />
-            <Button type="submit" disabled={isPending}>
-              Save
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                {user?.isOAuth === false && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="email"
+                              placeholder="example@mail.com"
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="password"
+                              placeholder="******"
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="newPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>New Password</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="password"
+                              placeholder="******"
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Role</FormLabel>
+                      <Select
+                        disabled={isPending}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a role" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
+                          <SelectItem value={UserRole.USER}>User</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {user?.isOAuth === false && (
+                  <FormField
+                    control={form.control}
+                    name="isTwoFactorEnable"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel>Two Factor Authentication</FormLabel>
+                          <FormDescription>
+                            Enable two factor authentication for your account
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            disabled={isPending}
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+              <FormError message={error} />
+              <FormSuccess message={success} />
+              <Button type="submit" disabled={isPending}>
+                Save
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

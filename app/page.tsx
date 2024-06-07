@@ -4,7 +4,7 @@ import LoginButton from "@/components/auth/login-button";
 
 export default function Home() {
   return (
-    <main className="flex h-full flex-col items-center justify-center bg-custom-radial">
+    <main className="flex h-full flex-col items-center justify-center ">
       <div className="space-y-6 text-center">
         <h1
   

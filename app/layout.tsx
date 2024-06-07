@@ -24,7 +24,7 @@ export default async function RootLayout({
       <html lang="en">
         <Toaster/>
         {/* <body className={inter.className}>{children}</body> */}
-        <body>{children}</body>
+        <body className="bg-custom-radial bg-no-repeat bg-cover bg-fixed min-h-screen">{children}</body>
       </html>
     </SessionProvider>
   );

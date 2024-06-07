@@ -3,7 +3,10 @@ import React from 'react'
 
 const page = () => {
   return (
-    <UserProfileFrom/>
+    <div className="flex-grow flex flex-col items-center p-4 sm:p-6 lg:p-8">
+    <UserProfileFrom />
+  </div>
+    // <UserProfileFrom/>
   )
 }
 

@@ -21,6 +21,12 @@ const config = {
       backgroundImage: {
         'custom-radial': 'radial-gradient(ellipse at top, #38bdf8, #1e3a8a)',
       },
+      backgroundRepeat: {
+        'no-repeat': 'no-repeat',
+      },
+      backgroundAttachment: {
+        'fixed': 'fixed',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -81,3 +87,5 @@ const config = {
 } satisfies Config
 
 export default config
+
+

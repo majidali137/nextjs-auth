@@ -39,7 +39,8 @@ const AdminPage =  () => {
 
 
   return (
-    <Card className="w-[600px]">
+    <div className="w-full px-2 items-center justify-center flex">
+    <Card className="sm:w-[600px] w-full">
       <CardHeader>
         <p className="text-2xl font-semibold text-center">
           🔑 Admin
@@ -62,6 +63,8 @@ const AdminPage =  () => {
 
    </CardContent>
       </Card>
+
+    </div>
   )
 }
 
