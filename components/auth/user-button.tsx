@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
-import { UploadProfilePicture } from "../UploadProfilePicture";
+// import { UploadProfilePicture } from "../UploadProfilePicture";
 import { LogoutButton } from "./logout-button";
 import { ExitIcon } from "@radix-ui/react-icons";
 import { useUserStore } from "@/hooks/useUserStore";

@@ -1,8 +1,8 @@
 "use client";
+import { useTransition, useState, useEffect } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition, useState } from "react";
 import { settings } from "@/actions/settings";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/hooks/use-current-user";
+import { useCurrentSession } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form-success";
 import { FormError } from "@/components/form-error";
 import { UserRole } from "@prisma/client";
@@ -37,15 +37,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { UploadProfilePicture } from "./UploadProfilePicture";
 import useFetchUserOnMount, { useUserStore } from "@/hooks/useUserStore";
-import { PuffLoader } from "react-spinners";
+// import { PuffLoader } from "react-spinners";
+
 
 const UserProfileFrom = () => {
-  const user = useCurrentUser();
+  const { session, status } = useCurrentSession();
+  const user = session?.user
 
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
+
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
@@ -58,6 +61,15 @@ const UserProfileFrom = () => {
       isTwoFactorEnable: user?.isTwoFactorEnable || undefined,
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      name: user?.name || "",
+      email: user?.email || "",
+      role: user?.role || undefined,
+      isTwoFactorEnable: user?.isTwoFactorEnable || false,
+    });
+  }, [user, form]);
 
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
     startTransition(() => {
@@ -74,12 +86,26 @@ const UserProfileFrom = () => {
         .catch(() => setError("Something went wrong!"));
     });
   };
+
   useFetchUserOnMount();
   const { users } = useUserStore();
 
-  if (!users) {
-    return <PuffLoader />;
+  if (!user || status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-yellow-500"></div>
+  </div>
+    );
   }
+
+if (status === "unauthenticated") {
+  return (
+    <>
+      <h1>Unauthenticated</h1>
+      <p>Please sign in to continue.</p>
+    </>
+  );
+}
 
   return (
     <div className="w-full px-2 items-center justify-center flex">
@@ -103,7 +129,8 @@ const UserProfileFrom = () => {
             </AvatarFallback>
           </Avatar>
 
-          <UploadProfilePicture userId={users?.id} />
+          <UploadProfilePicture userId={users?.id || "defaultUserId"} />
+
           {/* <Button variant="outline" className="rounded-full px-10 mt-6 " >Change Avatar</Button> */}
         </CardHeader>
         <CardContent>

@@ -236,6 +236,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
 import { SettingsSchema } from "@/Schemas";
+import { useCurrentSession } from "@/hooks/use-current-user";
+
 import {
   Form,
   FormField,
@@ -256,18 +258,23 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/hooks/use-current-user";
+// import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSuccess } from "@/components/form-success";
 import { FormError } from "@/components/form-error";
 import { UserRole } from "@prisma/client";
-import ClipLoader from "react-spinners/ClipLoader";
+// import ClipLoader from "react-spinners/ClipLoader";
 
-const SettingsPage = () => {
-  const user = useCurrentUser();
+// type MyComponentProps = {};
+
+  const SettingsPage = () => {
+  // const user = useCurrentUser();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
+  const { session, status } = useCurrentSession();
+  const user = session?.user
+
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
@@ -280,6 +287,8 @@ const SettingsPage = () => {
       isTwoFactorEnable: user?.isTwoFactorEnable || undefined,
     },
   });
+
+
 
   useEffect(() => {
     form.reset({
@@ -305,13 +314,24 @@ const SettingsPage = () => {
         .catch(() => setError("Something went wrong!"));
     });
   };
-  if (!user) {
+
+
+  if (!user || status === "loading") {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader color="#000" size={50} />
-      </div>
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-500"></div>
+  </div>
     );
   }
+
+if (status === "unauthenticated") {
+  return (
+    <>
+      <h1>Unauthenticated</h1>
+      <p>Please sign in to continue.</p>
+    </>
+  );
+}
 
   return (
     <div className="w-full px-2 items-center justify-center flex ">
@@ -471,8 +491,36 @@ export default SettingsPage;
 
 
 
+// "use client";
+
+// import { useCurrentSession } from "@/hooks/use-current-user";
+
+// // import { useCurrentSession } from "@/hooks/useCurrentSession";
+
+// type MyComponentProps = {};
+
+// const MyComponent = (props: MyComponentProps) => {
+//   const { session, status } = useCurrentSession();
+  
+
+//   if (status === "loading") {
+//     return <h1>Loading...</h1>;
+//   }
+
+//   if (status === "unauthenticated") {
+//     return (
+//       <>
+//         <h1>Unauthenticated</h1>
+//         <p>Please sign in to continue.</p>
+//       </>
+//     );
+//   }
+
+//   return <h1>Welcome {session?.user?.name} <br /> {session?.user?.email}</h1>;
+// };
 
 
+// export default MyComponent
 
 
 
